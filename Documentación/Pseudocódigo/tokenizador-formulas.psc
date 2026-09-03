@@ -62,7 +62,7 @@ Fin Funcion
 
 Algoritmo Tokenizador_Fórmula
 	Definir i, totalTokens Como Entero
-	Definir formula, textoSeparado Como Texto
+	Definir formula, textoSeparado, tokensFormula Como Texto
 	formula <- ""
 	i<- 1
 	totalTokens <- 0
