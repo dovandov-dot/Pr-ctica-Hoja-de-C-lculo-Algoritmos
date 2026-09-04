@@ -1,4 +1,4 @@
-Funcion cantidadTokens <- separarTexto (formula, textoSeparado Por Referencia)
+Funcion cantidadTokens <- separarTexto (formula, matrixFormula Por Referencia)
 	//Declaración de las variables constantes
 	Definir ESPACIO, SIGNOIGUAL Como Caracter
 	//Declaración de las variables
@@ -6,6 +6,7 @@ Funcion cantidadTokens <- separarTexto (formula, textoSeparado Por Referencia)
 	Definir textoAcumulado Como Texto
 	Definir textoTemporal Como Caracter
 	Definir operacionValida Como Logico
+	Definir letra1 Como Caracter
 	//Inicializando variables constantes
 	ESPACIO <- " "
 	SIGNOIGUAL <- "="
@@ -13,8 +14,9 @@ Funcion cantidadTokens <- separarTexto (formula, textoSeparado Por Referencia)
 	textoAcumulado <- ""
 	textoTemporal <- ""
 	cantidadTokens <- 0
-	espacioEnBlanco <- 1 //Para que el el bucle while que exactamente el esta el indice del signo =
+	espacioEnBlanco <- 1 //Para que el bucle while este exactamente en el primer carácter de la fórmula
 	i <- 0
+	letra1 <- ""
 	operacionValida <- Verdadero
 	formula <- Mayusculas(formula)
 	//para quitar los espacios en blanco entes del signo =
@@ -35,11 +37,28 @@ Funcion cantidadTokens <- separarTexto (formula, textoSeparado Por Referencia)
 				Si textoTemporal = "+" O textoTemporal = "-" O textoTemporal = "*" O textoTemporal = "/" O textoTemporal = "(" O textoTemporal = ")" O textoTemporal = ";" O textoTemporal = ":" O textoTemporal = "%" O textoTemporal ="^" O textoTemporal = "," Entonces
 					Si Longitud(textoAcumulado) > 0 Entonces
 						cantidadTokens <- cantidadTokens + 1
-						textoSeparado[cantidadTokens] <- textoAcumulado
+						matrixFormula[cantidadTokens,2] <- textoAcumulado //Se ingresa el primer el token a la matriz 
+						letra1 <- Subcadena(textoAcumulado, 1, 1)
+						Si textoAcumulado = "SUMA" O textoAcumulado = "PROMEDIO" O textoAcumulado = "MAX" O textoAcumulado = "MIN" Entonces
+							matrixFormula[cantidadTokens, 1] <- "FuncionRango"
+						SiNo 
+							Si letra1 = "0" O letra1 = "1" O letra1 = "2" O letra1 = "3" O letra1 = "4" O letra1 = "5" O letra1 = "6" O letra1 = "7" O letra1 = "8" O letra1 = "9" Entonces
+								matrixFormula[cantidadTokens, 1] <- "Numero"
+							SiNo
+								matrixFormula[cantidadTokens, 1] <- "Celda"
+							FinSi
+						FinSi
 						textoAcumulado <- "" //Sirve para poder separar las cadenas de texto
 					Fin Si
-					cantidadTokens <- cantidadTokens + 1
-					textoSeparado[cantidadTokens] <- textoTemporal
+					Si textoTemporal <> "(" Y textoTemporal <> ")"  Entonces
+						cantidadTokens <- cantidadTokens + 1
+						matrixFormula[cantidadTokens,1] <- "Operador" //Se agrega de que tipo es 
+						matrixFormula[cantidadTokens,2] <- textoTemporal //Sirve para poder guardar el signo de operación en la matriz
+					SiNo 
+						cantidadTokens <- cantidadTokens + 1
+						matrixFormula[cantidadTokens,1] <- "Parentesis" //Se agrega de que tipo es 
+						matrixFormula[cantidadTokens,2] <- textoTemporal //Sirve para poder guardar el signo de operación en la matriz	
+					FinSi
 				SiNo
 					Si textoTemporal <> ESPACIO Entonces
 						textoAcumulado <- textoAcumulado + textoTemporal
@@ -51,7 +70,13 @@ Funcion cantidadTokens <- separarTexto (formula, textoSeparado Por Referencia)
 		//Ayuda a guardar el último token de la fórmula cuando el último valor no es un operador(+,-,*,/,^,:,;,(,),%)
 		Si operacionValida = Verdadero Y Longitud(textoAcumulado) > 0  Entonces
 			cantidadTokens <- cantidadTokens + 1
-			textoSeparado[cantidadTokens] <- textoAcumulado
+			matrixFormula[cantidadTokens,2] <- textoAcumulado //Sirve para poder guardar el número en la matriz	
+			letra1 <- Subcadena(textoAcumulado, 1, 1)
+			Si letra1 = "0" O letra1 = "1" O letra1 = "2" O letra1 = "3" O letra1 = "4" O letra1 = "5" O letra1 = "6" O letra1 = "7" O letra1 = "8" O letra1 = "9" Entonces
+				matrixFormula[cantidadTokens, 1] <- "Numero"
+			SiNo
+				matrixFormula[cantidadTokens, 1] <- "Celda"
+			FinSi
 		FinSi
 	SiNo
 		Escribir "Error: Formula inválida. Debe comenzar con el signo ="
@@ -69,14 +94,21 @@ Algoritmo Tokenizador_Fórmula
 	
 	Escribir "Ingresa una formula: "
 	Leer formula
+	formula <- Mayusculas(formula)
+	// La primera columna es el tipo y la segunda el valor 
+	Dimension tokensFormula[Longitud(formula),2]
 	
-	Dimension  textoSeparado[Longitud(formula)]
-	
-	totalTokens <- separarTexto(formula, textoSeparado)
+	totalTokens <- separarTexto(formula, tokensFormula)
 	
 	Si totalTokens > 0 Entonces
 		Para i<-1 Hasta totalTokens Con Paso 1 Hacer
-			Escribir Sin saltar " ", textoSeparado[i], " "
+			Escribir Sin saltar " ", tokensFormula[i,2], " "
+		Fin Para
+		Escribir "" //Para hacer un salto de línea
+	Fin Si
+	Si totalTokens > 0 Entonces
+		Para i<-1 Hasta totalTokens Con Paso 1 Hacer
+			Escribir Sin saltar " ", tokensFormula[i,1], " "
 		Fin Para
 		Escribir "" //Para hacer un salto de línea
 	Fin Si
