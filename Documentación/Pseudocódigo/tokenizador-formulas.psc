@@ -105,7 +105,7 @@ Algoritmo Tokenizador_Fórmula
 	// La primera columna es el tipo y la segunda el valor 
 	Dimension tokensFormula[Longitud(formula),2]
 	
-	totalTokens <- separarTexto(formula, tokensFormula)
+	totalTokens <- tokenizarFormula(formula, tokensFormula)
 	
 	//Esta parte del código solo me sirve para verificar que la separación de la fórmula se hizó de manera correcta
 	Si totalTokens > 0 Entonces
