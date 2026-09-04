@@ -1,4 +1,4 @@
-Funcion cantidadTokens <- separarTexto (formula, matrixFormula Por Referencia)
+Funcion cantidadTokens <- tokenizarFormula (formula, matrixFormula Por Referencia)
 	//Declaración de las variables constantes
 	Definir ESPACIO, SIGNOIGUAL Como Caracter
 	//Declaración de las variables
@@ -18,7 +18,6 @@ Funcion cantidadTokens <- separarTexto (formula, matrixFormula Por Referencia)
 	i <- 0
 	letra1 <- ""
 	operacionValida <- Verdadero
-	formula <- Mayusculas(formula)
 	//para quitar los espacios en blanco entes del signo =
 	Mientras espacioEnBlanco <= Longitud(formula) Y Subcadena(formula, espacioEnBlanco, espacioEnBlanco) = ESPACIO Hacer
 		espacioEnBlanco <- espacioEnBlanco + 1
@@ -50,14 +49,22 @@ Funcion cantidadTokens <- separarTexto (formula, matrixFormula Por Referencia)
 						FinSi
 						textoAcumulado <- "" //Sirve para poder separar las cadenas de texto
 					Fin Si
-					Si textoTemporal <> "(" Y textoTemporal <> ")"  Entonces
-						cantidadTokens <- cantidadTokens + 1
-						matrixFormula[cantidadTokens,1] <- "Operador" //Se agrega de que tipo es 
-						matrixFormula[cantidadTokens,2] <- textoTemporal //Sirve para poder guardar el signo de operación en la matriz
-					SiNo 
-						cantidadTokens <- cantidadTokens + 1
+					//Aumentamos la cantidad de token para almacenar al operador en la matrix
+					cantidadTokens <- cantidadTokens + 1 
+					matrixFormula[cantidadTokens, 2] <- textoTemporal // Se ingresa el primer el token a la matriz
+					
+					Si textoTemporal = "(" O textoTemporal = ")"  Entonces
 						matrixFormula[cantidadTokens,1] <- "Parentesis" //Se agrega de que tipo es 
-						matrixFormula[cantidadTokens,2] <- textoTemporal //Sirve para poder guardar el signo de operación en la matriz	
+					SiNo 
+						Si textoTemporal = ":" Entonces
+							matrixFormula[cantidadTokens,1] <- "OperadorRango"
+						SiNo
+							Si textoTemporal = ";" O textoTemporal = "," Entonces
+								matrixFormula[cantidadTokens,1] <- "Separador"
+							SiNo
+								matrixFormula[cantidadTokens,1] <- "Operador"
+							FinSi
+						FinSi
 					FinSi
 				SiNo
 					Si textoTemporal <> ESPACIO Entonces
@@ -87,7 +94,7 @@ Fin Funcion
 
 Algoritmo Tokenizador_Fórmula
 	Definir i, totalTokens Como Entero
-	Definir formula, textoSeparado, tokensFormula Como Texto
+	Definir formula, tokensFormula Como Texto
 	formula <- ""
 	i<- 1
 	totalTokens <- 0
@@ -100,12 +107,14 @@ Algoritmo Tokenizador_Fórmula
 	
 	totalTokens <- separarTexto(formula, tokensFormula)
 	
+	//Esta parte del código solo me sirve para verificar que la separación de la fórmula se hizó de manera correcta
 	Si totalTokens > 0 Entonces
 		Para i<-1 Hasta totalTokens Con Paso 1 Hacer
 			Escribir Sin saltar " ", tokensFormula[i,2], " "
 		Fin Para
 		Escribir "" //Para hacer un salto de línea
 	Fin Si
+	//Esta parte del código sirve para verificar que clasificó correctamente los tokens de la fórmula
 	Si totalTokens > 0 Entonces
 		Para i<-1 Hasta totalTokens Con Paso 1 Hacer
 			Escribir Sin saltar " ", tokensFormula[i,1], " "
