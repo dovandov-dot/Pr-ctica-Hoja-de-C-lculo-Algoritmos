@@ -63,15 +63,15 @@ Funcion resultado <- operarPorcentaje(tokensFormula Por Referencia, pocisionToke
 	numeroIzquierdo <- ""
 	resultado <- ""
 	
-	numeroIzquierdo <- operarSignoNegativo(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+	numeroIzquierdo <- operarSignoNegativoPositivo(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
 	
 	Mientras pocisionToken <= filas Y tokensFormula[pocisionToken, 2] = "%"  Hacer
-		
+		//Se umenta en una para poder saber si se trata de una operación binaria u onitaria del porcentaje
 		Si pocisionToken+ 1 <= filas Y tokensFormula[pocisionToken + 1, 1] = "Numero" Entonces
 			operador <- tokensFormula[pocisionToken,2]
 			pocisionToken <- pocisionToken + 1
 			
-			numeroDerecho <- operarSignoNegativo(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
+			numeroDerecho <- operarSignoNegativoPositivo(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
 			//Creamos la primera fila del arbol AST
 			ultimoNodoCreado <- ultimoNodoCreado +1 
 			//Ingresamos todos los datos de los nodos de cada fila
@@ -97,7 +97,7 @@ Funcion resultado <- operarPorcentaje(tokensFormula Por Referencia, pocisionToke
 	resultado <- numeroIzquierdo
 Fin Funcion
 
-Funcion numeroFila <- operarSignoNegativo(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas)
+Funcion numeroFila <- operarSignoNegativoPositivo(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas)
 	Definir operador Como Caracter
 	Definir numeroIzquierdo, numeroDerecho, numeroFila Como Texto
 	operador <- ""
@@ -105,11 +105,11 @@ Funcion numeroFila <- operarSignoNegativo(tokensFormula Por Referencia, pocision
 	numeroDerecho <- ""
 	numeroFila <- ""
 	
-	Si  pocisionToken <= filas Y tokensFormula[pocisionToken,2] = "-" Entonces
+	Si  pocisionToken <= filas Y (tokensFormula[pocisionToken,2] = "-" O tokensFormula[pocisionToken,2] = "+") Entonces
 		operador <- tokensFormula[pocisionToken,2]
 		pocisionToken <- pocisionToken + 1
 		
-		numeroDerecho <- operarNumeroFuncionCeldaParéntesisRango(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado)
+		numeroDerecho <- operarSignoNegativoPositivo(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
 		//Creamos la primera fila del arbol AST
 		ultimoNodoCreado <- ultimoNodoCreado + 1
 		//Ingresamos todos los datos de los nodos de cada fila 
@@ -164,7 +164,7 @@ Fin Funcion
 
 
 Algoritmo Analizador_Sintáctico_Fórmula
-	Definir pocisionToken, ultimoNodoCreado,i, j, contadorFilas, resultadoFinal Como Entero
+	Definir pocisionToken, ultimoNodoCreado,i, j, contadorFilas, totalTokens, resultadoFinal Como Entero
 	Dimension tokensFormula[100,2] //Esta parte de código es para ejemplificar la matrix donde tenemos la formula ya tokenizada
 	resultadoFinal <- 0
 	pocisionToken <- 1
@@ -173,20 +173,21 @@ Algoritmo Analizador_Sintáctico_Fórmula
 	
 	tokensFormula[1,1] = "Operador" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
     tokensFormula[1,2] = "-" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-	tokensFormula[2,1] = "Numero" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-    tokensFormula[2,2] = "5" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-    tokensFormula[3,1] = "Operador" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-    tokensFormula[3,2] = "+" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-	tokensFormula[4,1] = "Numero" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-    tokensFormula[4,2] = "3" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-	tokensFormula[5,1] = "Operador" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-    tokensFormula[5,2] = "%" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokeniza
-	tokensFormula[6,1] = "Numero" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
-    tokensFormula[6,2] = "2" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizadada
-	contadorFilas <- 6 //Es para ejemplificar el dato que me dara el tokenizador
+	tokensFormula[2,1] = "Operador" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+    tokensFormula[2,2] = "+" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+    tokensFormula[3,1] = "Numero" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+    tokensFormula[3,2] = "5" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+	tokensFormula[4,1] = "Operador" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+    tokensFormula[4,2] = "*" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+	tokensFormula[5,1] = "Numero" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
+    tokensFormula[5,2] = "20" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokeniza
+	
+	totalTokens <- 5 //Este es en número de filas que se traen del tokenizador 
+	contadorFilas <- totalTokens //Es para ejemplificar el dato que me dara el tokenizador
+	
 	//Se crea una matriz para poder guardar todos los nodos que se van a operarPorcentaje
-//	//Las columnas son tipo, valor, numeroIzquierdo, numeroDerecho
-	Dimension matrizAST(100,4)
+	//Las columnas son tipo, valor, numeroIzquierdo, numeroDerecho
+	Dimension matrizAST(contadorFilas,4)
 	resultadoFinal <- operarSumaResta(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, contadorFilas)	
 	
 	//Indica el número de fila que contiene el nodo raíz(es la última operacion que se realiza para obtener el resultado final)
