@@ -88,11 +88,12 @@ Funcion cantidadTokens <- tokenizarFormula (formula, matrixFormula Por Referenci
 	SiNo
 		Escribir "Error: Formula inválida. Debe comenzar con el signo ="
 	FinSi
-	
 Fin Funcion
 
 
 Algoritmo Tokenizador_Fórmula
+	Definir NUMEROCOLUMNASTOKENSFORMULA Como Entero
+	NUMEROCOLUMNASTOKENSFORMULA <- 2
 	Definir i, totalTokens Como Entero
 	Definir formula, tokensFormula Como Texto
 	formula <- ""
@@ -103,7 +104,7 @@ Algoritmo Tokenizador_Fórmula
 	Leer formula
 	formula <- Mayusculas(formula)
 	// La primera columna es el tipo y la segunda el valor 
-	Dimension tokensFormula[Longitud(formula),2]
+	Dimension tokensFormula[Longitud(formula),NUMEROCOLUMNASTOKENSFORMULA]
 	
 	totalTokens <- tokenizarFormula(formula, tokensFormula)
 	

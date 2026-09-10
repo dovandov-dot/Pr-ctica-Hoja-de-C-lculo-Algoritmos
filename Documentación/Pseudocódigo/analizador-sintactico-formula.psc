@@ -146,40 +146,24 @@ Funcion valorLadoIzquierdoDerecho <- operarNumeroFuncionCeldaParéntesisRango (to
 	valorLadoIzquierdoDerecho <- ""
 	numeroFila <- ""
 	
-	Segun tokensFormula[pocisionToken,1] Hacer
-		"Numero":
-			valorLadoIzquierdoDerecho <- ObtenerNumero(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
-		"Celda":
-			valorLadoIzquierdoDerecho <- ObtenerCelda(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
-		"Parentesis":
-			valorLadoIzquierdoDerecho <- OperarParentesis(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
-		"FuncionRango":
-			Segun tokensFormula[pocisionToken,2] Hacer
-				"SUMA":
-					pocisionToken <- pocisionToken + 1
-					numeroFila <- operarNumeroFuncionCeldaParéntesisRango(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
-				"PROMEDIO":
-					pocisionToken <- pocisionToken + 1
-					numeroFila <- operarNumeroFuncionCeldaParéntesisRango(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
-				"MAX":
-					pocisionToken <- pocisionToken + 1
-					numeroFila <- operarNumeroFuncionCeldaParéntesisRango(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
-				"MIN":
-					pocisionToken <- pocisionToken + 1
-					numeroFila <- operarNumeroFuncionCeldaParéntesisRango(tokensFormula, pocisionToken,matrizAST, ultimoNodoCreado, filas)
-				De Otro Modo:
-					Escribir "Error: La función",tokensFormula[pocisionToken,2]," no esta disponible.Siguie en construcción."
+	Si pocisionToken > filas Entonces
+		valorLadoIzquierdoDerecho <- "0"
+		Escribir "Error: La fórmula está incompleta. Falta un número o expresión al final. Completela por favor." //Se colocaría como un break y una ventaja emergente.
+	SiNo
+		Segun tokensFormula[pocisionToken,1] Hacer
+			"Numero":
+				valorLadoIzquierdoDerecho <- ObtenerNumero(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+			"Celda":
+				valorLadoIzquierdoDerecho <- ObtenerCelda(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+			"Parentesis":
+				valorLadoIzquierdoDerecho <- OperarParentesis(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+			"FuncionRango":
+				valorLadoIzquierdoDerecho <- OperarFuncionRango(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+			De Otro Modo:
+				valorLadoIzquierdoDerecho <- "0"
+				Escribir "Error: Nose reconoce el valor o la función: ", tokensFormula[pocisionToken,1], " sigue en construcción."  //Se colocaría como un break y una ventaja emergente.
 			Fin Segun
-		De Otro Modo:
-			Si pocisionToken > filas Entonces
-				valorLadoIzquierdoDerecho <- "0"
-				Escribir "Error: La fórmula está incompleta. Falta un número o expresión al final. Completela por favor."
-			SiNo
-				valorLadoIzquierdoDerecho <- "0"
-				Escribir "Error: Nose reconoce el valor o la función: ", tokensFormula[pocisionToken,1], " sigue en construcción."
-			Fin Si
-	Fin Segun
-	
+	FinSi
 Fin Funcion
 
 Funcion numeroFila <- ObtenerNumero(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas)
@@ -261,44 +245,117 @@ FinFuncion
 
 Funcion numeroFila <- OperarFuncionRango(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas)
     Definir numeroFila, nombreFuncion, nodoParametros Como Texto
+	numeroFila <- ""
+	nombreFuncion <- ""
+	nodoParametros <- ""
+	
     nombreFuncion <- tokensFormula[pocisionToken, 2] // Ej: "SUMA", "PROMEDIO"
     pocisionToken <- pocisionToken + 1 // Avanzamos para verificar si el siguiente caracter es un paréntesis de apertura
     
-    // Verificamos que siga el paréntesis de apertura '('
-    Si pocisionToken <= filas Y tokensFormula[pocisionToken, 2] = "(" Entonces
-        pocisionToken <- pocisionToken + 1 // Avanzamos para analizar lo que esta dentro del paréntesis 
-        
-        // Obtenemos los parámetros encadenados (pueden ser rangos separados por coma)
-        nodoParametros <- ProcesarListaParametros(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
-        
-        // Verificamos paréntesis de cierre ')'
-        Si pocisionToken <= filas Y tokensFormula[pocisionToken, 2] = ")" Entonces
-            pocisionToken <- pocisionToken + 1 // Consumimos ')'
-        SiNo
-            Escribir "Error: Falta ')' al cerrar la función ", nombreFuncion
-        FinSi
-        
-        // Creamos el nodo de la función principal
-        ultimoNodoCreado <- ultimoNodoCreado + 1
-        matrizAST[ultimoNodoCreado, 1] <- "Funcion"
-        matrizAST[ultimoNodoCreado, 2] <- nombreFuncion
-        matrizAST[ultimoNodoCreado, 3] <- nodoParametros
-        matrizAST[ultimoNodoCreado, 4] <- "0"
-        
-        numeroFila <- ConvertirATexto(ultimoNodoCreado)
-    SiNo
-        Escribir "Error: Se esperaba '(' después de ", nombreFuncion
+	Si nombreFuncion <> "SUMA" Y nombreFuncion <> "PROMEDIO" Y nombreFuncion <> "MAX" Y nombreFuncion <> "MIN" Entonces
+		Escribir "Error Sintáctico: La función ", nombreFuncion, " no está disponible o no existe. Por favor verifique." //Se colocaría como un break y una ventaja emergente.
         numeroFila <- "0"
+	SiNo
+		// Verificamos que siga el paréntesis de apertura '('
+		Si pocisionToken <= filas Y tokensFormula[pocisionToken, 2] = "(" Entonces
+			pocisionToken <- pocisionToken + 1 // Avanzamos para analizar lo que esta dentro del paréntesis 
+			
+			// Obtenemos los parámetros encadenados (pueden ser rangos separados por coma)
+			nodoParametros <- ProcesarListaParametros(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+			
+			// Verificamos paréntesis de cierre ')'
+			Si pocisionToken <= filas Y tokensFormula[pocisionToken, 2] = ")" Entonces
+				CrearFilaEnMatrizASTFuncionRango(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas,nombreFuncion,nodoParametros)
+				numeroFila <- ConvertirATexto(ultimoNodoCreado)
+			SiNo
+				Escribir "Error: Falta ", ")", " al cerrar la función ", nombreFuncion //Se colocaría como un break y una ventaja emergente.
+				numeroFila <- "0"
+			FinSi
+		SiNo
+			Escribir "Error: Se esperaba ", "(", " después de ", nombreFuncion //Se colocaría como un break y una ventaja emergente.
+			numeroFila <- "0"
+		FinSi
+	FinSi
+FinFuncion
+
+SubProceso CrearFilaEnMatrizASTFuncionRango(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas,nombreFuncion,nodoParametros)
+	pocisionToken <- pocisionToken + 1 // Consumimos ')'
+	// Creamos el nodo de la función principal
+	ultimoNodoCreado <- ultimoNodoCreado + 1
+	matrizAST[ultimoNodoCreado, 1] <- "Funcion"
+	matrizAST[ultimoNodoCreado, 2] <- nombreFuncion
+	matrizAST[ultimoNodoCreado, 3] <- nodoParametros
+	matrizAST[ultimoNodoCreado, 4] <- "0"
+FinSubProceso
+
+Funcion nodoActual <- ProcesarListaParametros(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas)
+    Definir nodoIzquierdo, nodoDerecho, nodoActual Como Texto
+	nodoDerecho <- ""
+	nodoIzquierdo <- ""
+	nodoActual <- ""
+    
+    // Procesamos el primer parámetro (ej. un Rango A1:A5 o una expresión/celda)
+    nodoIzquierdo <- OperarRango(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+    
+    // Si hay una coma "," o  ";", procesamos el siguiente parámetro recursivamente
+    Si pocisionToken <= filas Y (tokensFormula[pocisionToken, 2] = "," O tokensFormula[pocisionToken, 2] = ";") Entonces
+        pocisionToken <- pocisionToken + 1 // Consumimos la "," o ";"
+        
+        nodoDerecho <- ProcesarListaParametros(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+        
+        // Creamos un nodo conector de tipo Parametro (,)
+        ultimoNodoCreado <- ultimoNodoCreado + 1
+        matrizAST[ultimoNodoCreado, 1] <- "Parametro"
+        matrizAST[ultimoNodoCreado, 2] <- ","
+        matrizAST[ultimoNodoCreado, 3] <- nodoIzquierdo
+        matrizAST[ultimoNodoCreado, 4] <- nodoDerecho
+        
+        nodoActual <- ConvertirATexto(ultimoNodoCreado)
+    SiNo
+        nodoActual <- nodoIzquierdo
+    FinSi
+FinFuncion
+
+Funcion nodoRango <- OperarRango(tokensFormula Por Referencia, pocisionToken Por Referencia, matrizAST Por Referencia, ultimoNodoCreado Por Referencia, filas)
+    Definir nodoIzquierdo, nodoDerecho, nodoRango Como Texto
+    nodoIzquierdo <- ""
+	nodoDerecho <- ""
+	nodoRango <- ""
+    // Evaluamos el lado izquierdo 
+    nodoIzquierdo <- operarSumaResta(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+    
+    // Verificamos si existe el operador de rango ':'
+    Si pocisionToken <= filas Y tokensFormula[pocisionToken, 2] = ":" Entonces
+        pocisionToken <- pocisionToken + 1 // Consumimos ':'
+        
+        // Evaluamos el lado derecho 
+        nodoDerecho <- operarSumaResta(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, filas)
+        
+        // Creamos el nodo de Rango
+        ultimoNodoCreado <- ultimoNodoCreado + 1
+        matrizAST[ultimoNodoCreado, 1] <- "Rango"
+        matrizAST[ultimoNodoCreado, 2] <- ":"
+        matrizAST[ultimoNodoCreado, 3] <- nodoIzquierdo
+        matrizAST[ultimoNodoCreado, 4] <- nodoDerecho
+        
+        nodoRango <- ConvertirATexto(ultimoNodoCreado)
+    SiNo
+        nodoRango <- nodoIzquierdo
     FinSi
 FinFuncion
 
 Algoritmo Analizador_Sintáctico_Fórmula
+	Definir NUMEROCOLUMNASMATRIZAST, NUMEROCOLUMNASTOKENSFORMULA Como Entero
+	NUMEROCOLUMNASMATRIZAST <- 4
+	NUMEROCOLUMNASTOKENSFORMULA <- 2
+	
 	Definir pocisionToken, ultimoNodoCreado,i, j, contadorFilas, totalTokens, resultadoFinal Como Entero
-	Dimension tokensFormula[100,2] //Esta parte de código es para ejemplificar la matrix donde tenemos la formula ya tokenizada
+	Dimension tokensFormula[100,NUMEROCOLUMNASTOKENSFORMULA] //Esta parte de código es para ejemplificar la matrix donde tenemos la formula ya tokenizada
 	resultadoFinal <- 0
 	pocisionToken <- 1
 	ultimoNodoCreado <- 0
 	i <- 1
+	j <- 1
 	
 	tokensFormula[1,1] = "Parentesis" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
     tokensFormula[1,2] = "(" //Esta parte de código es para ejemplificar el array donde tenemos la formula ya tokenizada
@@ -318,7 +375,7 @@ Algoritmo Analizador_Sintáctico_Fórmula
 	
 	//Se crea una matriz para poder guardar todos los nodos que se van a operarPorcentaje
 	//Las columnas son tipo, valor, numeroIzquierdo, numeroDerecho
-	Dimension matrizAST(contadorFilas,4)
+	Dimension matrizAST(contadorFilas,NUMEROCOLUMNASMATRIZAST)
 	resultadoFinal <- operarSumaResta(tokensFormula, pocisionToken, matrizAST, ultimoNodoCreado, contadorFilas)	
 	
 	//Indica el número de fila que contiene el nodo raíz(es la última operacion que se realiza para obtener el resultado final)
@@ -326,7 +383,7 @@ Algoritmo Analizador_Sintáctico_Fórmula
 	//Es solo para poder verificar que la estructura del árbol AST sea correcta 
 	Para i <- 1 Hasta ultimoNodoCreado Con Paso 1 Hacer
 		Escribir Sin Saltar i, " " //Las " " sirven para dejar un espacion entre cada dato
-		Para j <- 1  Hasta 4 Con Paso 1 Hacer
+		Para j <- 1  Hasta NUMEROCOLUMNASMATRIZAST Con Paso 1 Hacer
 			Escribir Sin Saltar matrizAST[i,j], " " //Las " " sirven para dejar un espacion entre cada dato
 		Fin Para
 		Escribir ""//Las "" sirven para poder hacer un salto de línea 
