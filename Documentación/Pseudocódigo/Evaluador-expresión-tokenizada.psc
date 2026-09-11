@@ -80,31 +80,19 @@ Funcion resultadoFormula <- OperarOperador(matrizAST, i,resultado)
 	Fin Segun
 FinFuncion
 
-Funcion valorNumero <- PasarTextoANumeroDerecho(matrizAST,numeroDerecho,resultadoFormula)
-	Si matrizAST[numeroDerecho,1] <> "Operador" Entonces
-		Si matrizAST[numeroDerecho,1] = "Numero" Entonces
-			valorNumero <- ConvertirANumero(matrizAST[numeroDerecho,2])
+Funcion valorNumero <- PasarTextoANumero(matrizAST,idFila,resultadoFormula)
+	Si matrizAST[idFila,1] <> "Operador" Entonces //Esto es para verificar cuando ya se ha hecho una operación antes y almacenar su valor
+		Si matrizAST[idFila,1] = "Numero" Entonces
+			valorNumero <- ConvertirANumero(matrizAST[idFila,2])
 		SiNo
-			valorNumero <- ObtenerValorCeldaDerecha(matrizAST,numeroDerecho)
+			valorNumero <- ObtenerValorCelda(matrizAST,idFila)
 		Fin Si
 	SiNo
-		valorNumero <- resultadoFormula[numeroDerecho]
+		valorNumero <- resultadoFormula[idFila]
 	Fin Si
 FinFuncion
 
-Funcion valorNumero <- PasarTextoANumeroIzquierdo(matrizAST,numeroIzquierdo,resultadoFormula)
-	Si matrizAST[numeroIzquierdo,1] <> "Operador" Entonces
-		Si matrizAST[numeroIzquierdo,1] = "Numero" Entonces
-			valorNumero <- ConvertirANumero(matrizAST[numeroIzquierdo,2])
-		SiNo
-			valorNumero <- ObtenerValorCeldaIzquierda(matrizAST,numeroIzquierdo)
-		Fin Si
-	SiNo
-		valorNumero <- resultadoFormula[numeroIzquierdo]
-	Fin Si
-FinFuncion
-
-Funcion valorCelda <- ObtenerValorCeldaIzquierda(matrizAST,numeroIzquierdo)
+Funcion valorCelda <- ObtenerValorCelda(matrizAST,idFila)
 	Definir fila, columna Como Entero
 	Definir valorCelda Como Real
 	Dimension matrizhojaCalculo[35,16] //Ejemplicar la matriz de la hoja de calculo
@@ -115,32 +103,14 @@ Funcion valorCelda <- ObtenerValorCeldaIzquierda(matrizAST,numeroIzquierdo)
 	matrizhojaCalculo[1,1] <- 10
 	matrizhojaCalculo[5,2] <- 2
 
-	Si matrizAST[numeroIzquierdo,1] = "Celda" Entonces
-		fila <- ConvertirANumero(matrizAST[numeroIzquierdo,4])
-		columna <- TransformarColumnaIzquierdaANumero(matrizAST,numeroIzquierdo)
+	Si matrizAST[idFila,1] = "Celda" Entonces
+		fila <- ConvertirANumero(matrizAST[idFila,4])
+		columna <- TransformarColumnaANumero(matrizAST,idFila)
 		valorCelda <- matrizhojaCalculo[fila,columna]
 	Fin Si
 FinFuncion
 
-Funcion valorCelda <- ObtenerValorCeldaDerecha(matrizAST,numeroDerecho)
-	Definir fila, columna Como Entero
-	Definir valorCelda Como Real
-	Dimension matrizhojaCalculo[35,16] //Ejemplicar la matriz de la hoja de calculo
-	fila <- 0
-	columna <- 0
-	valorCelda <- 0.0
-	
-	matrizhojaCalculo[1,1] <- 10
-	matrizhojaCalculo[5,2] <- 2
-	
-	Si matrizAST[numeroDerecho,1] = "Celda" Entonces
-		fila <- ConvertirANumero(matrizAST[numeroDerecho,4])
-		columna <- TransformarColumnaDerechaANumero(matrizAST,numeroDerecho)
-		valorCelda <- matrizhojaCalculo[fila,columna]
-	Fin Si
-FinFuncion
-
-Funcion valorCelda <- TransformarColumnaIzquierdaANumero(matrizAST,numeroIzquierdo)
+Funcion valorCelda <- TransformarColumnaANumero(matrizAST,idFila)
 	Definir letraColumna, abecedario Como Texto
 	Definir valorLetra, i,j,valorCelda Como Entero
 	Definir valorLetraActual Como Caracter
@@ -152,7 +122,7 @@ Funcion valorCelda <- TransformarColumnaIzquierdaANumero(matrizAST,numeroIzquier
 	valorLetraActual <- ""
 	valorCelda <- 0
 	
-	letraColumna  <- matrizAST[numeroIzquierdo,3]
+	letraColumna  <- matrizAST[idFila,3]
 	
 	Para i<-1 Hasta Longitud(letraColumna) Con Paso 1 Hacer
 		valorLetraActual <- Subcadena(letraColumna,i,i)
@@ -164,37 +134,13 @@ Funcion valorCelda <- TransformarColumnaIzquierdaANumero(matrizAST,numeroIzquier
 	Fin Para	
 FinFuncion
 
-Funcion valorCelda <- TransformarColumnaDerechaANumero(matrizAST,numeroDerecho)
-	Definir letraColumna, abecedario Como Texto
-	Definir valorLetra, i,j,valorCelda Como Entero
-	Definir valorLetraActual Como Caracter
-	letraColumna <- ""
-	abecedario <- "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	valorLetra <- 0
-	i <- 1
-	j <- 1
-	valorLetraActual <- ""
-	valorCelda <- 0
-	
-	letraColumna  <- matrizAST[numeroDerecho,3]
-	
-	Para i<-1 Hasta Longitud(letraColumna) Con Paso 1 Hacer
-		valorLetraActual <- Subcadena(letraColumna,i,i)
-		Para j<-1 Hasta Longitud(abecedario)  Con Paso 1 Hacer
-			Si valorLetraActual = Subcadena(abecedario, j,j) Entonces
-				valorCelda <- (valorCelda * 26) + j
-			Fin Si
-		Fin Para
-	Fin Para
-FinFuncion
-
 SubProceso RealizarOperacion(matrizAST, numeroDerecho Por Referencia,numeroIzquierdo Por Referencia,resultadoFormula)
 	Definir filaNumeroDerecho, filaNumeroIzquierdo Como Entero
 	filaNumeroDerecho <- numeroDerecho
 	filaNumeroIzquierdo <- numeroIzquierdo
 	
-	numeroIzquierdo <- PasarTextoANumeroIzquierdo(matrizAST,filaNumeroIzquierdo,resultadoFormula) 
-	numeroDerecho <- PasarTextoANumeroDerecho(matrizAST,filaNumeroDerecho,resultadoFormula)
+	numeroIzquierdo <- PasarTextoANumero(matrizAST,filaNumeroIzquierdo,resultadoFormula) 
+	numeroDerecho <- PasarTextoANumero(matrizAST,filaNumeroDerecho,resultadoFormula)
 FinSubProceso
 
 Algoritmo Evaluador_AST_Formula
@@ -259,7 +205,6 @@ Algoritmo Evaluador_AST_Formula
 	matrizAST[13,2] <- "-"
 	matrizAST[13,3] <- "9"
 	matrizAST[13,4] <- "12"
-	
 	
 	resultadoFormula <- OperarMatrizAST(matrizAST,ultimoNodoCreado)
 	Escribir resultadoFormula
