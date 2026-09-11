@@ -23,6 +23,7 @@ Funcion resultado <- operarSumaResta (tokensFormula Por Referencia, pocisionToke
 		matrizAST[ultimoNodoCreado,3] <- numeroIzquierdo
 		matrizAST[ultimoNodoCreado,4] <- numeroDerecho
 		numeroIzquierdo <- ConvertirATexto(ultimoNodoCreado)
+		
 	Fin Mientras
 	
 	resultado <- ultimoNodoCreado
