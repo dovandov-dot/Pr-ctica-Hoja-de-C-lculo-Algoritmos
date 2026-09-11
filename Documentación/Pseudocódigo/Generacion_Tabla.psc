@@ -4,8 +4,7 @@ Funcion letra <- obtenerLetraColumna (columna)
 	Definir letra, abecedario Como Texto
 	residuo <- 0
 	letra <- ""
-	// La cadena con 26 letras sirve para silumar la función String.fromCharCode() de JavaScript que convierte
-	//Los números en carácteres ASCII
+	// La cadena con 26 letras sirve para silumar la función String.fromCharCode() de JavaScript que convierte los números en carácteres ASCII
     abecedario <- "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	Mientras columna > 0 Hacer
 		residuo = (columna-1) % 26
@@ -21,7 +20,7 @@ Funcion hacerTabla (filas, columnas)
 	
 	Para filaEncabezado<-1 Hasta 1 Con Paso 1 Hacer
 		//Se crear una fila con un <tr> de html
-		Escribir Sin Saltar "i"//Aquí se imprimiria como <th> de html para mostrar el encabezado de losíndices
+		Escribir Sin Saltar "i"//Aquí se imprimiria como <th> de html para mostrar el encabezado de los índices
 		Para columnaEncabezados<-1 Hasta columnas Con Paso 1 Hacer
 			letra <- obtenerLetraColumna(columnaEncabezados)
 			Escribir Sin Saltar "  ", letra,"   "//Todo esto iria en un <th> html vació para genera las celdas
