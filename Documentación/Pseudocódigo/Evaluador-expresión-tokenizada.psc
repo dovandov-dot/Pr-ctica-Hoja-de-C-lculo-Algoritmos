@@ -178,15 +178,45 @@ FinFuncion
 Funcion valorCelda <- ObtenerValorCelda(matrizAST,idFila,matrizhojaCalculo)
 	Definir fila, columna Como Entero
 	Definir valorCelda Como Real
+	Definir textoCelda Como Texto
 	fila <- 0
 	columna <- 0
 	valorCelda <- 0.0
+	textoCelda <- ""
 	
 	Si matrizAST[idFila,1] = "Celda" Entonces
 		fila <- ConvertirANumero(matrizAST[idFila,4])
 		columna <- TransformarColumnaANumero(matrizAST,idFila)
-		valorCelda <- matrizhojaCalculo[fila,columna]
+		textoCelda <- matrizhojaCalculo[fila,columna]
+		
+		Si VerificarSiEsNumero(textoCelda) = Verdadero  Entonces
+			valorCelda <- ConvertirANumero(textoCelda)
+		SiNo
+			Escribir "Error #¡VALOR!: La celda contiene texto y no se puede operar."//Se frena la ejecución con un tipo brake
+			valorCelda <- 0 
+		Fin Si
 	Fin Si
+FinFuncion
+
+Funcion ValorVerificadorBooleano <- VerificarSiEsNumero(textoCelda)
+	Definir i, contador Como Entero
+	Definir ValorVerificadorBooleano Como Logico
+	Definir letraActual Como Caracter
+	i <- 1
+	contador <- 0
+	ValorVerificadorBooleano <- Falso
+	letraActual <- ""
+	
+	Para i <- 1 Hasta Longitud(textoCelda) Con Paso 1 Hacer
+		letraActual <- Subcadena(textoCelda,i,i)
+		Si  letraActual = "0" O letraActual = "1" O letraActual = "2" O letraActual = "3" O letraActual = "4" O letraActual = "5" O letraActual = "6" O  letraActual = "7" O letraActual = "8" O letraActual = "9" O letraActual = "." Entonces
+			contador <- contador + 1 
+		Fin Si
+	Fin Para
+	
+	Si contador = Longitud(textoCelda) Y Longitud(textoCelda) > 0 Entonces
+		ValorVerificadorBooleano <- Verdadero
+	FinSi
 FinFuncion
 
 Funcion valorCelda <- TransformarColumnaANumero(matrizAST,idFila)
@@ -250,8 +280,8 @@ Algoritmo Evaluador_AST_Formula
 	ultimoNodoCreado <- 13 //Sirve para ejemplificar la cantidad de filas de la matrizAST que se obtuvo en el analizador sintáctico 
 	
 	Dimension matrizhojaCalculo[35,16] //Ejemplicar la matriz de la hoja de calculo
-	matrizhojaCalculo[1,1] <- 10
-	matrizhojaCalculo[5,2] <- 2
+	matrizhojaCalculo[1,1] <- "10"
+	matrizhojaCalculo[5,2] <- "2"
 	
 	Dimension matrizAST[contadorFilas, NUMEROCOLUMNAMATRIZAST]
 	//La matrizAST es la representaciòn de la fórmula 30+20*5 / A1+B5-(10-5)
