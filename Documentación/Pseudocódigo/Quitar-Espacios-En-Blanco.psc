@@ -34,6 +34,7 @@ Algoritmo Quitar_Espacio_En_Blanco
 	
 	textoSinEspacioEnBlanco <- QuitarEspaciosExtremos(textoHojaCalculo)
 	
-	Escribir "Es texto limpio queda como: ",textoSinEspacioEnBlanco
+	Escribir "La cantidad de caracteres del texto sin espacios en blanco es: ", Longitud(textoSinEspacioEnBlanco)
+	Escribir "La cantidad de caracteres del texto con espacios en blanco es: ",Longitud(textoHojaCalculo)
 	
 FinAlgoritmo
