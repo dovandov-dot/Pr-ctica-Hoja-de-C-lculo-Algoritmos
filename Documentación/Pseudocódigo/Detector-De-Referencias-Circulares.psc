@@ -32,7 +32,24 @@ FinSubProceso
 // Función auxiliar para simular un diccionario. 
 // Busca el índice de una celda por su nombre. Si no existe, la registra.
 Funcion indice <- ObtenerIndiceCelda (nombreCelda, nombresCeldas Por Referencia, totalCeldasRegistradas Por Referencia)
-
+	Definir indice, i Como Entero
+    indice <- 0
+	i <- 1
+    
+    // Buscar si la celda ya está registrada
+    Para i <- 1 Hasta totalCeldasRegistradas Hacer
+        Si nombresCeldas[i] = nombreCelda Entonces
+            indice <- i
+			i <- totalCeldasRegistradas + 1 //Para simular la función de un brake 
+        FinSi
+    FinPara
+    
+    // Si no existe, agregarla al "diccionario"
+    Si indice = 0 Entonces
+        totalCeldasRegistradas <- totalCeldasRegistradas + 1
+        nombresCeldas[totalCeldasRegistradas] <- nombreCelda
+        indice <- totalCeldasRegistradas
+    FinSi
 FinFuncion
 
 Algoritmo Detección_De_Referencias_Circulares
