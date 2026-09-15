@@ -71,15 +71,7 @@ Funcion hayCiclo <- DetectarCicloDFS (indiceActual, matrizDependencias Por Refer
             estados[indiceActual] <- 1
             
             // Revisamos todas las celdas para ver de cuáles depende la actual
-            Para i <- 1 Hasta totalCeldasRegistradas Hacer
-                Si matrizDependencias[indiceActual, i] = 1 Entonces
-                    // Llamada recursiva bajando por el árbol de dependencias
-                    Si DetectarCicloDFS(i, matrizDependencias, estados, totalCeldasRegistradas) = Verdadero Entonces
-                        hayCiclo <- Verdadero
-                        i <- totalCeldasRegistradas // Forzar salida del bucle (Break)
-                    FinSi
-                FinSi
-            FinPara
+			RevisarCeldaDependiente(totalCeldasRegistradas,matrizDependencias,indiceActual,i,estados,hayCiclo)
             
             // Si validamos todas sus dependencias sin error, la marcamos como "Segura"
             Si hayCiclo = Falso Entonces
@@ -89,6 +81,17 @@ Funcion hayCiclo <- DetectarCicloDFS (indiceActual, matrizDependencias Por Refer
     FinSi
 FinFuncion
 
+SubProceso RevisarCeldaDependiente(totalCeldasRegistradas,matrizDependencias,indiceActual,i Por Referencia,estados,hayCiclo Por Referencia)
+	Para i <- 1 Hasta totalCeldasRegistradas Hacer
+		Si matrizDependencias[indiceActual, i] = 1 Entonces
+			// Llamada recursiva bajando por el árbol de dependencias
+			Si DetectarCicloDFS(i, matrizDependencias, estados, totalCeldasRegistradas) = Verdadero Entonces
+				hayCiclo <- Verdadero
+				i <- totalCeldasRegistradas // Forzar salida del bucle (Break)
+			FinSi
+		FinSi
+	FinPara
+FinSubProceso
 Algoritmo Detección_De_Referencias_Circulares
 	Definir NUMEROCOLUMNASTOKENSFORMULA, MAX_CELDAS Como Entero
     NUMEROCOLUMNASTOKENSFORMULA <- 2
@@ -126,7 +129,7 @@ Algoritmo Detección_De_Referencias_Circulares
 	tokensFormula[2,1] <- "Operador" 
 	tokensFormula[2,2] <- "+"
 	tokensFormula[3,1] <- "Celda" 
-	tokensFormula[3,2] <- "C1"
+	tokensFormula[3,2] <- "B1"
 		
 	// 1. Extraer las dependencias de la matriz de tokens, en el ejemplo seria extraer las celdas A1 y B2
 	ExtraerDependencias(celdaEditada, tokensFormula, totalTokens, matrizDependencias, nombresCeldas, totalCeldasRegistradas)
