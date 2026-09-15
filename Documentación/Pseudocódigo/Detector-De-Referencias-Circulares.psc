@@ -37,10 +37,10 @@ Funcion indice <- ObtenerIndiceCelda (nombreCelda, nombresCeldas Por Referencia,
 	i <- 1
     
     // Buscar si la celda ya está registrada
-    Para i <- 1 Hasta totalCeldasRegistradas Hacer
+    Para i <- 1 Hasta totalCeldasRegistradas Con Paso 1 Hacer
         Si nombresCeldas[i] = nombreCelda Entonces
             indice <- i
-			i <- totalCeldasRegistradas + 1 //Para simular la función de un brake 
+			i <- totalCeldasRegistradas  //Para simular la función de un brake 
         FinSi
     FinPara
     
@@ -49,6 +49,43 @@ Funcion indice <- ObtenerIndiceCelda (nombreCelda, nombresCeldas Por Referencia,
         totalCeldasRegistradas <- totalCeldasRegistradas + 1
         nombresCeldas[totalCeldasRegistradas] <- nombreCelda
         indice <- totalCeldasRegistradas
+    FinSi
+FinFuncion
+
+//Funcion para detectar las relaciones circulares 
+Funcion hayCiclo <- DetectarCicloDFS (indiceActual, matrizDependencias Por Referencia, estados Por Referencia, totalCeldasRegistradas)
+    Definir hayCiclo Como Logico
+    Definir i Como Entero
+    hayCiclo <- Falso
+	i <- 1
+    
+    // Verifica si Chocamos con una celda que está en proceso de revisión actual, para dectectar la referencia circular 
+    Si estados[indiceActual] = 1 Entonces
+        hayCiclo <- Verdadero
+    SiNo
+        // Estado 2: Esta celda ya fue revisada antes y no causó problemas
+        Si estados[indiceActual] = 2 Entonces
+            hayCiclo <- Falso
+        SiNo
+            // Marcamos como "En proceso"
+            estados[indiceActual] <- 1
+            
+            // Revisamos todas las celdas para ver de cuáles depende la actual
+            Para i <- 1 Hasta totalCeldasRegistradas Hacer
+                Si matrizDependencias[indiceActual, i] = 1 Entonces
+                    // Llamada recursiva bajando por el árbol de dependencias
+                    Si DetectarCicloDFS(i, matrizDependencias, estados, totalCeldasRegistradas) = Verdadero Entonces
+                        hayCiclo <- Verdadero
+                        i <- totalCeldasRegistradas // Forzar salida del bucle (Break)
+                    FinSi
+                FinSi
+            FinPara
+            
+            // Si validamos todas sus dependencias sin error, la marcamos como "Segura"
+            Si hayCiclo = Falso Entonces
+                estados[indiceActual] <- 2
+            FinSi
+        FinSi
     FinSi
 FinFuncion
 
@@ -83,18 +120,29 @@ Algoritmo Detección_De_Referencias_Circulares
     celdaEditada <- "C1"
 	
 	//Ejemplo: el usuario ingreo la fórmula "=A1+B2" y el tokenizador nos genero la siguiente matriz 
-		totalTokens <- 3
-		tokensFormula[1,1] <- "Celda" 
-		tokensFormula[1,2] <- "A1"
-		tokensFormula[2,1] <- "Operador" 
-		tokensFormula[2,2] <- "+"
-		tokensFormula[3,1] <- "Celda" 
-		tokensFormula[3,2] <- "B2"
+	totalTokens <- 3
+	tokensFormula[1,1] <- "Celda" 
+	tokensFormula[1,2] <- "A1"
+	tokensFormula[2,1] <- "Operador" 
+	tokensFormula[2,2] <- "+"
+	tokensFormula[3,1] <- "Celda" 
+	tokensFormula[3,2] <- "C1"
 		
 	// 1. Extraer las dependencias de la matriz de tokens, en el ejemplo seria extraer las celdas A1 y B2
-		ExtraerDependencias(celdaEditada, tokensFormula, totalTokens, matrizDependencias, nombresCeldas, totalCeldasRegistradas)
+	ExtraerDependencias(celdaEditada, tokensFormula, totalTokens, matrizDependencias, nombresCeldas, totalCeldasRegistradas)
 	// 2. Preparar el arreglo de estados (limpiarlo antes de cada comprobación) sirve para que casa celda tenga el valor de 0 e identificar que todavia no se a comprobado esa celda 
-		
-	// 3. Ejecutar la detección de ciclos	
+	Para i <- 1 Hasta totalCeldasRegistradas Hacer
+		estados[i] <- 0
+	FinPara
+	// 3. Ejecutar la detección de referencias circulares 
+	indiceCeldaEditada <- ObtenerIndiceCelda(celdaEditada, nombresCeldas, totalCeldasRegistradas)
+	errorCircular <- DetectarCicloDFS(indiceCeldaEditada, matrizDependencias, estados, totalCeldasRegistradas)
+	
+	Si errorCircular = Verdadero Entonces
+        Escribir "ERROR: Se detectó una referencia circular en la fórmula."
+    SiNo
+        Escribir "Fórmula válida. No hay referencias circulares."
+        // Despues de realizar esta verificación ya se puede llevar la formula a analizador sintáctico y el evaluardor 
+    FinSi
 	
 FinAlgoritmo
