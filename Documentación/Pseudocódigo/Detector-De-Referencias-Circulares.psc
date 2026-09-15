@@ -92,6 +92,7 @@ SubProceso RevisarCeldaDependiente(totalCeldasRegistradas,matrizDependencias,ind
 		FinSi
 	FinPara
 FinSubProceso
+
 Algoritmo Detección_De_Referencias_Circulares
 	Definir NUMEROCOLUMNASTOKENSFORMULA, MAX_CELDAS Como Entero
     NUMEROCOLUMNASTOKENSFORMULA <- 2
