@@ -1,4 +1,4 @@
-function ObtenerLetraColumna(columna){
+export function ObtenerLetraColumna(columna){
     let residuo = 0
     let letra = ""
 
@@ -13,7 +13,7 @@ function ObtenerLetraColumna(columna){
 }
 
 
-function HacerTabla(filas, columnas){
+export function HacerTabla(filas, columnas){
     let columnaEncabezados = 0;
     let filaEncabezado = 1;
     let filaActual =1;
@@ -40,12 +40,5 @@ function HacerTabla(filas, columnas){
     }
     hojaCalculo = "</table>";
 
-    return document.getElementById("MatrizHojaCalculo").innerHTML = hojaCalculo;
-}
-
-export function GeneracionTabla(){
-    const NUMEROFILAS = 35;
-    const NUMEROCOLUMNAS = 16;
-
-    HacerTabla(NUMEROFILAS, NUMEROCOLUMNAS);
+    return hojaCalculo
 }

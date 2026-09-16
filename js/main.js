@@ -1,3 +1,11 @@
-import {GeneracionTabla} from "./crearTabla.js"
+import {HacerTabla} from "./crearTabla.js"
 
-const tablaHojaCalculo = GeneracionTabla()
+const NUMEROCOLUMNAS = 16;
+const NUMEROFILAS = 35;
+
+const tablaHojaCalculo = HacerTabla(NUMEROFILAS,NUMEROCOLUMNAS)
+const contenedorTabla = document.getElementById("MatrizHojaCalculo")
+
+if (contenedorTabla){
+    contenedorTabla.innerHTML = tablaHojaCalculo
+}
