@@ -20,6 +20,8 @@ export function HacerTabla(filas, columnas){
     let columnaActual = 0;
     let letra = "";
     let hojaCalculo = "<table>";
+    let idCelda = ""
+    let letraIdCelda = ""
 
     hojaCalculo = hojaCalculo + "<tr>"
     hojaCalculo = hojaCalculo + "<th>i</th>"
@@ -29,12 +31,14 @@ export function HacerTabla(filas, columnas){
         hojaCalculo = hojaCalculo + "<th>" + letra + "</th>";   
     }
     hojaCalculo = hojaCalculo + "</tr>"
-
+    //Para hacer las filas  de la tabla
     for (filaActual = 1; filaActual <= filas; filaActual++) {
         hojaCalculo = hojaCalculo + "<tr>"
         hojaCalculo = hojaCalculo + "<td>" + filaActual + "</td>"
         for (columnaActual = 1; columnaActual <= columnas; columnaActual++) {
-            hojaCalculo = hojaCalculo + "<td>Dato</td>" 
+            letraIdCelda = ObtenerLetraColumna(columnaActual)
+            idCelda = letraIdCelda + filaActual
+            hojaCalculo = hojaCalculo + `<td contenteditable='true' id="${idCelda}"></td>` 
         }
         hojaCalculo = hojaCalculo + "</tr>"
     }
