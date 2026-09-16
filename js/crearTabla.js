@@ -12,7 +12,34 @@ function ObtenerLetraColumna(columna){
 
 }
 
+
 function HacerTabla(filas, columnas){
+    let columnaEncabezados = 0;
+    let filaEncabezado = 1;
+    let filaActual =1;
+    let columnaActual = 0;
+    let letra = "";
+    let hojaCalculo = "<table>";
+
+    hojaCalculo = hojaCalculo + "<tr>"
+    hojaCalculo = hojaCalculo + "<th>i</th>"
+    //Para hacer los encabezados de la tabla
+    for (columnaEncabezados = 0; columnaEncabezados < columnas; columnaEncabezados++) {
+        letra = ObtenerLetraColumna(columnaEncabezados);
+        hojaCalculo = hojaCalculo + "<th>" + letra + "</th>";   
+    }
+    hojaCalculo = hojaCalculo + "</tr>"
+
+    for (filaActual = 1; filaEncabezado <= filas; filaActual++) {
+        hojaCalculo = hojaCalculo + "<tr>"
+        hojaCalculo = hojaCalculo + "<td>" + filaActual + "</td>"
+        for (columnaActual = 1; columnaActual <= columnas; columnaActual++) {
+            hojaCalculo = hojaCalculo + "<td>Dato</td>" 
+        }
+        hojaCalculo = hojaCalculo + "</tr>"
+    }
+    hojaCalculo = "</table>";
+
 
 }
 
