@@ -4,3 +4,7 @@ td, th {
     height: 22px;
     width: 64px;
 }
+
+table {
+    border-collapse: collapse;
+}
