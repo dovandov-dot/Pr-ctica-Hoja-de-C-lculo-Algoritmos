@@ -40,7 +40,7 @@ function HacerTabla(filas, columnas){
     }
     hojaCalculo = "</table>";
 
-
+    document.getElementById("MatrizHojaCalculo").innerHTML = hojaCalculo;
 }
 
 function GeneracionTabla(){
