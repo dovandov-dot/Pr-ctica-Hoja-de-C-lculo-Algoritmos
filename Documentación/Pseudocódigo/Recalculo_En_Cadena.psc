@@ -65,7 +65,7 @@ Algoritmo Recalculo_En_Cadena
     Escribir "--- INICIO DE SIMULACIÓN ---"
     Escribir "El usuario acaba de modificar la celda: A1"
     
-    // (Aquí iría la lógica donde construyes el AST y evalúas A1)
+    // (Aquí iría la lógica donde se construye el AST y se evalua, en este caso seria el de la celda A1)
     Escribir "El nuevo valor de A1 ha sido calculado y guardado."
     Escribir "----------------------------"
     
