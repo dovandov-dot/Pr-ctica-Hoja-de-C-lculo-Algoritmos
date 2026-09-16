@@ -1,5 +1,5 @@
-td {
-    border: 1px black ;
+td, th {
+    border: 1px solid black ;
     padding: 4px 8px;
     height: 22px;
     width: 64px;
