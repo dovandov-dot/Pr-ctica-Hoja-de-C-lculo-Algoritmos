@@ -40,10 +40,10 @@ function HacerTabla(filas, columnas){
     }
     hojaCalculo = "</table>";
 
-    document.getElementById("MatrizHojaCalculo").innerHTML = hojaCalculo;
+    return document.getElementById("MatrizHojaCalculo").innerHTML = hojaCalculo;
 }
 
-function GeneracionTabla(){
+export function GeneracionTabla(){
     const NUMEROFILAS = 35;
     const NUMEROCOLUMNAS = 16;
 
