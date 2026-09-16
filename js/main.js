@@ -1,5 +1,6 @@
 import {HacerTabla} from "./crearTabla.js"
 import {EstadoHojaCalculoGlobal} from "./estructuraDeDatos.js"
+import {textoSinEspacioEnBlanco} from "./quitarEspaciosEnBlanco.js"
 
 const NUMEROCOLUMNAS = 16;
 const NUMEROFILAS = 35;
@@ -12,8 +13,8 @@ if (contenedorTabla){
 
     contenedorTabla.querySelectorAll("td[contenteditable='true']").forEach(celda => {
         celda.addEventListener("blur", function(e){
-            EstadoHojaCalculoGlobal.actualizarCelda(celda.id, celda.innerText)
-            
+            const nuevoValor = textoSinEspacioEnBlanco(celda.innerText)
+            EstadoHojaCalculoGlobal.actualizarCelda(celda.id, nuevoValor)
         });
 
         celda.addEventListener("keydown", function(e){
