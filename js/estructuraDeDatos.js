@@ -3,7 +3,7 @@ export class Celda {
         this.id = idCelda;
         this.textoOriginal = valorInicial;
         this.valorCalculado = valorInicial; // Nivel 2: El valor calculo es el mismo que el ingresado por el usuario
-        this.arbolAST = null;
+        this.arbolAST = {};
         this.dependencias = [];
         this.dependientes = [];
     }
