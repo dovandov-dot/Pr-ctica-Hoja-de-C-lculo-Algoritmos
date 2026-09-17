@@ -16,7 +16,6 @@ function ProcesarFormulaIngresada(textoIngresado, idCelda){
     //TODO: Por último se procesa el Árbol AST con el evaluador y el resultado se almacena en el objeto celda 
     const celdaActual = EstadoHojaCalculoGlobal.obtenerCelda(idCelda) //Se busca la celda para poder ingresar el árbol AST
     celdaActual.arbolAST = //TODO: se pondría el objeto que genero el evaluador sintáctico
-
 }
 
 if (contenedorTabla){
@@ -26,6 +25,9 @@ if (contenedorTabla){
         celda.addEventListener("blur", function(e){
             const nuevoValor = textoSinEspacioEnBlanco(celda.innerText)
             EstadoHojaCalculoGlobal.actualizarCelda(celda.id, nuevoValor)
+            if (nuevoValor[1] === "=") {
+                ProcesarFormulaIngresada(nuevoValor, celda.id)
+            }
         });
 
         celda.addEventListener("keydown", function(e){
