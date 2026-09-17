@@ -15,7 +15,7 @@ export function TokenizarFormula(formula) {
             if (textoAcumulado.length > 0) {
                 cantidadTokens = cantidadTokens + 1
                 letra1 = textoAcumulado[1]
-                //TODO: Aqui se ingresaria el valor el diccionario, 
+                //TODO: Aqui se ingresaria el valor acumulado el diccionario de objetos independietes, 
                 //Pendiente definir e integrar la estructura de datos final.
             }
         }
@@ -33,6 +33,14 @@ function ObtenerTipoDeDatoNumeroCeldaFuncionRango(textoAcumulado, letra1,formula
  }
 }
 
-function ObtenerTipoDeDatoParOperadorSeparadorAgrupador(textoAcumulado,formulaTokenizada){
-//TODO: Implementar lógica de clasificación de operadores, separadores y agrupadores
+function ObtenerTipoDeDatoParOperadorSeparadorAgrupador(textoTemporal,formulaTokenizada){
+    if (textoTemporal === "(" || textoTemporal === ")") {
+        //TODO: Aquí se ingresaria el tipo(Parentesis) con su valor al arreglo formulaTokenizada como objeto independiente 
+    } else if (textoTemporal === ":"){
+        //TODO: Aquí se ingresaria el tipo(OperadorRango) con su valor al arreglo formulaTokenizada como objeto independiente 
+    }else if (textoTemporal === ";" || textoTemporal === ","){
+        //TODO: Aquí se ingresaria el tipo(Separador) con su valor al arreglo formulaTokenizada como objeto independiente 
+    }else {
+        //TODO: Aquí se ingresaria el tipo(Operador) con su valor al arreglo formulaTokenizada como objeto independiente
+    }
 }
