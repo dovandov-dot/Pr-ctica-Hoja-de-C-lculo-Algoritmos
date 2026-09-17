@@ -1,4 +1,6 @@
 export function TokenizarFormula(formula) {
+    const formulaTokenizada = []
+    const ESPACIO = " "
     let i = 1;
     let cantidadTokens = 0;
     let textoAcumulado = "";
@@ -17,8 +19,18 @@ export function TokenizarFormula(formula) {
                 letra1 = textoAcumulado[1]
                 //TODO: Aqui se ingresaria el valor acumulado el diccionario de objetos independietes, 
                 //Pendiente definir e integrar la estructura de datos final.
+                ObtenerTipoDeDatoNumeroCeldaFuncionRango(textoAcumulado, letra1,formulaTokenizada);
+                textoAcumulado = "";
+            }
+            cantidadTokens = cantidadTokens + 1;
+            //TODO: Aqui se ingresaria el valor del texto temporal el diccionario de objetos independietes, 
+            ObtenerTipoDeDatoParOperadorSeparadorAgrupador(textoTemporal, formulaTokenizada);
+        }else{
+            if (textoTemporal !== ESPACIO) {
+                textoAcumulado = textoAcumulado + textoTemporal;
             }
         }
+        i = i + 1;
     }
 }
 
