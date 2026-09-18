@@ -4,10 +4,9 @@ export function TokenizarFormula(formula) {
     let i = 0;
     let textoAcumulado = "";
     let textoTemporal = "";
-    let operacionValida = true;
     let letra1 = "";
 
-    while (i < formula.length && operacionValida === true) {
+    while (i < formula.length) {
         textoTemporal = formula[i]
         if (textoTemporal === "[" || textoTemporal === "]" || textoTemporal === "{" || textoTemporal === "}") {
             alert("El símbolo " + textoTemporal + " no estan permitido. Utiliza solo los paréntesis() para agrupar ")
