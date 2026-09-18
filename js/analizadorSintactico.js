@@ -60,14 +60,17 @@ export class AnalizadorSintactico {
             if (this.posicionToken + 1 < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken + 1].tipo === "Numero") {
                 numeroIzquierdo = this.OperarPorcentajeFormaBinaria()
             } else {
-                numeroIzquierdo = this.OperarPorcentajeFormaUnitaria
+                numeroIzquierdo = this.OperarPorcentajeFormaUnitaria()
             }
         }
         return numeroIzquierdo
     }
 
-    OperarPorcentajeFormaBinaria() {
-    
+    OperarPorcentajeFormaBinaria(numeroIzquierdo,operador) {
+        let numeroDerecho = {};
+
+        numeroDerecho = this.operarSignoNegativoPositivo()
+        return {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho}
     }
 
     OperarPorcentajeFormaUnitaria() {
