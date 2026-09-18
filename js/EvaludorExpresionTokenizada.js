@@ -18,7 +18,7 @@ export class EvaluadroAST{
     PasarTextoANumero(){
 
     }
-
+    //Se agregará en el nivel 4
     ObtenerValorCelda(){
 
     }
@@ -36,6 +36,6 @@ export class EvaluadroAST{
     }
 
     OperarPorcentaje(){
-        
+
     }
 }
