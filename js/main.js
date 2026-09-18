@@ -13,7 +13,7 @@ const contenedorTabla = document.getElementById("MatrizHojaCalculo")
 function ProcesarFormulaIngresada(formulaIngresado, idCelda){
     const tokensFormula = TokenizarFormula(formulaIngresado);
     const analizadorSintactico = new AnalizadorSintactico(formulaIngresado);
-    const arbolAST = analizadorSintactico;
+    const arbolAST = analizadorSintactico.parsear();
 
     const celdaActual = EstadoHojaCalculoGlobal.obtenerCelda(idCelda) //Se busca la celda para poder ingresar el árbol AST
     celdaActual.arbolAST = arbolAST
