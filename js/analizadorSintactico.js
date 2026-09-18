@@ -47,6 +47,23 @@ export class AnalizadorSintactico {
     }
 
     OperarPorcentaje() {
+        let numeroIzquierdo = {};
+        let numeroDerecho = {};
+        let operador = "";
+
+        numeroIzquierdo = this.operarSignoNegativoPositivo()
+
+        while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "%"){
+            operador = this.formulaTokenizada[this.posicionToken].valor;
+            this.posicionToken++;
+            
+            if (this.posicionToken + 1 < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken + 1].tipo === "Numero") {
+                numeroIzquierdo = this.OperarPorcentajeFormaBinaria()
+            } else {
+                numeroIzquierdo = this.OperarPorcentajeFormaUnitaria
+            }
+        }
+        return numeroIzquierdo
     }
 
     OperarPorcentajeFormaBinaria() {
