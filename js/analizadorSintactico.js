@@ -137,7 +137,21 @@ export class AnalizadorSintactico {
     }
 
     OperarParentesis() {
-    
+        let resultado = {}
+
+        if (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "(") {
+            this.posicionToken++
+
+            resultado = this.OperarSumaResta();
+
+            if (this.posicionToken > this.formulaTokenizada.length || this.formulaTokenizada[this.posicionToken].valor !== ")") {
+                alert("Error: Falta un pararéntesis de cierre en la fórmula")
+                return;
+            } else {
+                this.posicionToken++
+                return resultado
+            }
+        }
     }
 }
 
