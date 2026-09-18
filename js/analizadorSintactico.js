@@ -95,7 +95,25 @@ export class AnalizadorSintactico {
     }
 
     operarNumeroFuncionCeldaParéntesisRango() {
-    
+        let resultado = "";
+
+        if (this.posicionToken > this.formulaTokenizada.length) {
+            alert("Error: La fórmula está incompleta. Falta un número o expresión al final. Completela por favor.");
+            return;
+        } else {
+            switch (this.formulaTokenizada[this.posicionToken].tipo) {
+                case "Numero":
+                    return resultado = this.ObtenerNumero();
+                case "Celda":
+                    return resultado = this.ObtenerCelda();
+                case "Parentesis":
+                    return resultado = this.OperarParentesis();
+            
+                default:
+                    alert("Error: Nose reconoce el valor o la función: " + this.formulaTokenizada[this.posicionToken].valor)
+                    break;
+            }
+        }
     }
 
     ObtenerNumero() {
