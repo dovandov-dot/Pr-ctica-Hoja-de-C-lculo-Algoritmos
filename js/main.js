@@ -24,7 +24,7 @@ if (contenedorTabla){
 
     contenedorTabla.querySelectorAll("td[contenteditable='true']").forEach(celda => {
         celda.addEventListener("blur", function(e){
-            const nuevoValor = textoSinEspacioEnBlanco(celda.innerText)
+            const nuevoValor = textoSinEspacioEnBlanco(celda.innerText).toUpperCase()
             EstadoHojaCalculoGlobal.actualizarCelda(celda.id, nuevoValor)
             if (nuevoValor[0] === "=") {
                 let formula = nuevoValor.substring(1)
