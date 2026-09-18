@@ -14,6 +14,7 @@ function ProcesarFormulaIngresada(formulaIngresado, idCelda){
     //TODO: Aquí se enviaria la fórmula tokenizada al evaluador sintáctico 
     //TODO: Después el resultado se mandaria a guardar al objeto celda 
     //TODO: Por último se procesa el Árbol AST con el evaluador y el resultado se almacena en el objeto celda 
+    console.log(`Fórmula: ${formulaIngresado}`, tokensFormula); //Para probar la funcionalidad del tokenizador
     const celdaActual = EstadoHojaCalculoGlobal.obtenerCelda(idCelda) //Se busca la celda para poder ingresar el árbol AST
     //celdaActual.arbolAST = //TODO: se pondría el objeto que genero el evaluador sintáctico
 }

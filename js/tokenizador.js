@@ -1,14 +1,14 @@
 export function TokenizarFormula(formula) {
     const formulaTokenizada = []
     const ESPACIO = " "
-    let i = 1;
+    let i = 0;
     let cantidadTokens = 0;
     let textoAcumulado = "";
     let textoTemporal = "";
     let operacionValida = true;
     let letra1 = "";
 
-    while (i <= formula.length && operacionValida === true) {
+    while (i < formula.length && operacionValida === true) {
         textoTemporal = formula[i]
         if (textoTemporal === "[" || textoTemporal === "]" || textoTemporal === "{" || textoTemporal === "}") {
             alert("El símbolo " + textoTemporal + " no estan permitido. Utiliza solo los paréntesis() para agrupar ")
