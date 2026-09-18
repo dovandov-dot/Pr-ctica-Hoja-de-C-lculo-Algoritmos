@@ -16,7 +16,7 @@ export class AnalizadorSintactico {
 
         numeroIzquierdo = this.OperarMultiplicacionDivision();
 
-        while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-") {
+        while (this.posicionToken < this.formulaTokenizada.length && (this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-")) {
             operador = this.formulaTokenizada[this.posicionToken].valor;
             this.posicionToken++;
 
@@ -35,7 +35,7 @@ export class AnalizadorSintactico {
 
         numeroIzquierdo = this.OperarPorcentaje();
 
-        while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "*" || this.formulaTokenizada[this.posicionToken].valor === "/") {
+        while (this.posicionToken < this.formulaTokenizada.length && (this.formulaTokenizada[this.posicionToken].valor === "*" || this.formulaTokenizada[this.posicionToken].valor === "/")) {
             operador = this.formulaTokenizada[this.posicionToken].valor;
             this.posicionToken++;
 
@@ -82,15 +82,15 @@ export class AnalizadorSintactico {
         let numeroDerecho = {};
         let operador = "";
 
-        if (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-") {
+        if (this.posicionToken < this.formulaTokenizada.length && (this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-")) {
             operador = this.formulaTokenizada[this.posicionToken].valor;
             this.posicionToken++;
             
             numeroDerecho = this.operarSignoNegativoPositivo();
 
-            numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: null, numeroDerecho: numeroDerecho};
+            return numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: null, numeroDerecho: numeroDerecho};
         } else {
-            numeroIzquierdo = this.operarNumeroFuncionCeldaParéntesisRango();
+            return numeroIzquierdo = this.operarNumeroFuncionCeldaParéntesisRango();
         }
     }
 
@@ -144,7 +144,7 @@ export class AnalizadorSintactico {
 
             resultado = this.OperarSumaResta();
 
-            if (this.posicionToken > this.formulaTokenizada.length || this.formulaTokenizada[this.posicionToken].valor !== ")") {
+            if (this.posicionToken >= this.formulaTokenizada.length || this.formulaTokenizada[this.posicionToken].valor !== ")") {
                 alert("Error: Falta un pararéntesis de cierre en la fórmula")
                 return;
             } else {
