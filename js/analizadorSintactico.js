@@ -117,7 +117,9 @@ export class AnalizadorSintactico {
     }
 
     ObtenerNumero() {
-    
+        let numero = "";
+
+        return numero = {tipo: "Numero", valor: this.formulaTokenizada[this.posicionToken].valor}
     }
 
     ObtenerCelda() {
