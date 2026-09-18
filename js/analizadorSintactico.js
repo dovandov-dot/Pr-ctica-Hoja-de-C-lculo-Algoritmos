@@ -78,7 +78,20 @@ export class AnalizadorSintactico {
     }
 
     operarSignoNegativoPositivo() {
-    
+        let numeroIzquierdo = {};
+        let numeroDerecho = {};
+        let operador = "";
+
+        if (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-") {
+            operador = this.formulaTokenizada[this.posicionToken].valor;
+            this.posicionToken++;
+            
+            numeroDerecho = this.operarSignoNegativoPositivo();
+
+            numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: null, numeroDerecho: numeroDerecho};
+        } else {
+            numeroIzquierdo = this.operarNumeroFuncionCeldaParéntesisRango();
+        }
     }
 
     operarNumeroFuncionCeldaParéntesisRango() {
