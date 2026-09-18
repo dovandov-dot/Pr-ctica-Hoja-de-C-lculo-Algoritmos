@@ -2,56 +2,67 @@ export class AnalizadorSintactico {
     constructor(formulaTokenizada) {
         this.formulaTokenizada = formulaTokenizada;
         this.posicionToken = 0;
-        this.arbolAST = {}
     }
 
-    OperarSumaResta(formulaTokenizada, posicionToken) {
-        const arbolAST = {}
-        let numeroIzquierdo = {}
-        let numeroDerecho = {}
-        let resultado = 0
+    // Arranca el análisis y devuelve el Objeto Raíz (El AST completo)
+    parsear() {
+        return this.OperarSumaResta();
+    }
 
-        numeroIzquierdo = OperarMultiplicacionDivision(formulaTokenizada, posicionToken, arbolAST,)
+    OperarSumaResta() {
+        const arbolAST = {};
+        let numeroIzquierdo = {};
+        let numeroDerecho = {};
+        let resultado = 0;
+        let operador = "";
 
-        while (posicionToken < formulaTokenizada.length && formulaTokenizada[posicionToken].valor === "+" || formulaTokenizada[posicionToken].valor === "-") {
-            
+        numeroIzquierdo = this.OperarMultiplicacionDivision()
+
+        while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-") {
+            operador = this.formulaTokenizada[this.posicionToken].valor;
+            this.posicionToken++;
+
+            numeroDerecho = this.OperarMultiplicacionDivision()
+
+            numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho};
         }
+        return numeroIzquierdo
     
     }
 
-    OperarMultiplicacionDivision(formulaTokenizada,posicionToken,arbolAST) {
+    OperarMultiplicacionDivision() {
     
     }
 
-    OperarPorcentaje(formulaTokenizada,posicionToken) {
+    OperarPorcentaje() {
     
     }
 
-    OperarPorcentajeFormaBinaria(formulaTokenizada,posicionToken) {
+    OperarPorcentajeFormaBinaria() {
     
     }
 
-    OperarPorcentajeFormaUnitaria(formulaTokenizada,posicionToken) {
+    OperarPorcentajeFormaUnitaria() {
     
     }
 
-    operarSignoNegativoPositivo(formulaTokenizada,posicionToken) {
+    operarSignoNegativoPositivo() {
     
     }
 
-    operarNumeroFuncionCeldaParéntesisRango(formulaTokenizada,posicionToken) {
+    operarNumeroFuncionCeldaParéntesisRango() {
     
     }
 
-    ObtenerNumero(formulaTokenizada,posicionToken) {
+    ObtenerNumero() {
     
     }
 
-    ObtenerCelda(formulaTokenizada,posicionToken) {
+    ObtenerCelda() {
     
     }
 
-    OperarParentesis(formulaTokenizada,posicionToken) {
+    OperarParentesis() {
     
     }
 }

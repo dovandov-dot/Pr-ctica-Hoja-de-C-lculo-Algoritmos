@@ -2,6 +2,7 @@ import {HacerTabla} from "./crearTabla.js"
 import {EstadoHojaCalculoGlobal} from "./estructuraDeDatos.js"
 import {textoSinEspacioEnBlanco} from "./quitarEspaciosEnBlanco.js"
 import {TokenizarFormula} from "./tokenizador.js"
+import {AnalizadorSintactico} from "./analizadorSintactico.js"
 
 const NUMEROCOLUMNAS = 16;
 const NUMEROFILAS = 35;
