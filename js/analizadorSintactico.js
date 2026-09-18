@@ -97,7 +97,7 @@ export class AnalizadorSintactico {
     operarNumeroFuncionCeldaParéntesisRango() {
         let resultado = "";
 
-        if (this.posicionToken > this.formulaTokenizada.length) {
+        if (this.posicionToken >= this.formulaTokenizada.length) {
             alert("Error: La fórmula está incompleta. Falta un número o expresión al final. Completela por favor.");
             return;
         } else {
