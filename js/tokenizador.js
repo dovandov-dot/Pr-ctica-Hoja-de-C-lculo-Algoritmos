@@ -44,12 +44,12 @@ function ObtenerTipoDeDatoNumeroCeldaFuncionRango(textoAcumulado, letra1,formula
 
 function ObtenerTipoDeDatoParOperadorSeparadorAgrupador(textoTemporal,formulaTokenizada){
     if (textoTemporal === "(" || textoTemporal === ")") {
-        formulaTokenizada.push({tipo:"Parentesis", valor:  textoAcumulado})
+        formulaTokenizada.push({tipo:"Parentesis", valor:  textoTemporal})
     } else if (textoTemporal === ":"){
-        formulaTokenizada.push({tipo:"OperadorRango", valor:  textoAcumulado})
+        formulaTokenizada.push({tipo:"OperadorRango", valor:  textoTemporal})
     }else if (textoTemporal === ";" || textoTemporal === ","){
-        formulaTokenizada.push({tipo:"Separador", valor:  textoAcumulado})
+        formulaTokenizada.push({tipo:"Separador", valor:  textoTemporal})
     }else {
-        formulaTokenizada.push({tipo:"Operador", valor:  textoAcumulado})
+        formulaTokenizada.push({tipo:"Operador", valor:  textoTemporal})
     }
 }
