@@ -29,6 +29,11 @@ export function TokenizarFormula(formula) {
         }
         i = i + 1;
     }
+    if (textoAcumulado.length > 0) {
+        cantidadTokens = cantidadTokens + 1;
+        letra1 = textoAcumulado[0]
+        ObtenerTipoDeDatoNumeroCeldaFuncionRango(textoAcumulado,letra1,formulaTokenizada)
+    }
     return formulaTokenizada;
 }
 
