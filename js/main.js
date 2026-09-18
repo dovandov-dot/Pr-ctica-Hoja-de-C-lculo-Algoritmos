@@ -12,13 +12,14 @@ const contenedorTabla = document.getElementById("MatrizHojaCalculo")
 
 function ProcesarFormulaIngresada(formulaIngresado, idCelda){
     const tokensFormula = TokenizarFormula(formulaIngresado);
-    const analizadorSintactico = new AnalizadorSintactico(formulaIngresado);
+    const analizadorSintactico = new AnalizadorSintactico(tokensFormula);
     const arbolAST = analizadorSintactico.parsear();
 
     const celdaActual = EstadoHojaCalculoGlobal.obtenerCelda(idCelda) //Se busca la celda para poder ingresar el árbol AST
     celdaActual.arbolAST = arbolAST
     //TODO: Por último se procesa el Árbol AST con el evaluador y el resultado se almacena en el objeto celda 
     console.log(`Fórmula: ${formulaIngresado}`, tokensFormula); //Para probar la funcionalidad del tokenizador
+    console.log("ÁrbolAST:", celdaActual.arbolAST)//Para probar la funcionalidad del analizador sintáctico
 }
 
 if (contenedorTabla){
