@@ -14,13 +14,13 @@ export class AnalizadorSintactico {
         let numeroDerecho = {};
         let operador = "";
 
-        numeroIzquierdo = this.OperarMultiplicacionDivision()
+        numeroIzquierdo = this.OperarMultiplicacionDivision();
 
         while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "+" || this.formulaTokenizada[this.posicionToken].valor === "-") {
             operador = this.formulaTokenizada[this.posicionToken].valor;
             this.posicionToken++;
 
-            numeroDerecho = this.OperarMultiplicacionDivision()
+            numeroDerecho = this.OperarMultiplicacionDivision();
 
             numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho};
         }
@@ -33,13 +33,13 @@ export class AnalizadorSintactico {
         let numeroDerecho = {};
         let operador = "";
 
-        numeroIzquierdo = this.OperarPorcentaje()
+        numeroIzquierdo = this.OperarPorcentaje();
 
         while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "*" || this.formulaTokenizada[this.posicionToken].valor === "/") {
             operador = this.formulaTokenizada[this.posicionToken].valor;
             this.posicionToken++;
 
-            numeroDerecho = this.OperarPorcentaje()
+            numeroDerecho = this.OperarPorcentaje();
 
             numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho};
         }
@@ -51,16 +51,16 @@ export class AnalizadorSintactico {
         let numeroDerecho = {};
         let operador = "";
 
-        numeroIzquierdo = this.operarSignoNegativoPositivo()
+        numeroIzquierdo = this.operarSignoNegativoPositivo();
 
         while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "%"){
             operador = this.formulaTokenizada[this.posicionToken].valor;
             this.posicionToken++;
             
             if (this.posicionToken + 1 < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken + 1].tipo === "Numero") {
-                numeroIzquierdo = this.OperarPorcentajeFormaBinaria()
+                numeroIzquierdo = this.OperarPorcentajeFormaBinaria(numeroIzquierdo,operador);
             } else {
-                numeroIzquierdo = this.OperarPorcentajeFormaUnitaria()
+                numeroIzquierdo = this.OperarPorcentajeFormaUnitaria(numeroIzquierdo,operador);
             }
         }
         return numeroIzquierdo
@@ -70,11 +70,11 @@ export class AnalizadorSintactico {
         let numeroDerecho = {};
 
         numeroDerecho = this.operarSignoNegativoPositivo()
-        return {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho}
+        return {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho};
     }
 
-    OperarPorcentajeFormaUnitaria() {
-    
+    OperarPorcentajeFormaUnitaria(numeroIzquierdo, operador) {
+        return {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: null};
     }
 
     operarSignoNegativoPositivo() {
