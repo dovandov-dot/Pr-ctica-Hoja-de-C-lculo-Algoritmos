@@ -2,7 +2,6 @@ export function TokenizarFormula(formula) {
     const formulaTokenizada = []
     const ESPACIO = " "
     let i = 0;
-    let cantidadTokens = 0;
     let textoAcumulado = "";
     let textoTemporal = "";
     let operacionValida = true;
@@ -15,12 +14,10 @@ export function TokenizarFormula(formula) {
             break
         } else if (textoTemporal === "+" || textoTemporal === "-" || textoTemporal === "*" || textoTemporal === "/" || textoTemporal === "(" || textoTemporal === ")" || textoTemporal === "," || textoTemporal === ";" || textoTemporal === ":" || textoTemporal === "%" || textoTemporal === "^") {
             if (textoAcumulado.length > 0) {
-                cantidadTokens = cantidadTokens + 1
                 letra1 = textoAcumulado[0]
                 ObtenerTipoDeDatoNumeroCeldaFuncionRango(textoAcumulado, letra1,formulaTokenizada);
                 textoAcumulado = "";
             }
-            cantidadTokens = cantidadTokens + 1;
             ObtenerTipoDeDatoParOperadorSeparadorAgrupador(textoTemporal, formulaTokenizada);
         }else{
             if (textoTemporal !== ESPACIO) {
@@ -30,7 +27,6 @@ export function TokenizarFormula(formula) {
         i = i + 1;
     }
     if (textoAcumulado.length > 0) {
-        cantidadTokens = cantidadTokens + 1;
         letra1 = textoAcumulado[0]
         ObtenerTipoDeDatoNumeroCeldaFuncionRango(textoAcumulado,letra1,formulaTokenizada)
     }
