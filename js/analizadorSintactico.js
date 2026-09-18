@@ -10,10 +10,8 @@ export class AnalizadorSintactico {
     }
 
     OperarSumaResta() {
-        const arbolAST = {};
         let numeroIzquierdo = {};
         let numeroDerecho = {};
-        let resultado = 0;
         let operador = "";
 
         numeroIzquierdo = this.OperarMultiplicacionDivision()
@@ -31,11 +29,24 @@ export class AnalizadorSintactico {
     }
 
     OperarMultiplicacionDivision() {
-    
+        let numeroIzquierdo = {};
+        let numeroDerecho = {};
+        let operador = "";
+
+        numeroIzquierdo = this.OperarPorcentaje()
+
+        while (this.posicionToken < this.formulaTokenizada.length && this.formulaTokenizada[this.posicionToken].valor === "*" || this.formulaTokenizada[this.posicionToken].valor === "/") {
+            operador = this.formulaTokenizada[this.posicionToken].valor;
+            this.posicionToken++;
+
+            numeroDerecho = this.OperarPorcentaje()
+
+            numeroIzquierdo = {tipo: "Operador", valor: operador, numeroIzquierdo: numeroIzquierdo, numeroDerecho: numeroDerecho};
+        }
+        return numeroIzquierdo
     }
 
     OperarPorcentaje() {
-    
     }
 
     OperarPorcentajeFormaBinaria() {
