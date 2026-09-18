@@ -119,11 +119,21 @@ export class AnalizadorSintactico {
     ObtenerNumero() {
         let numero = "";
 
-        return numero = {tipo: "Numero", valor: this.formulaTokenizada[this.posicionToken].valor}
+        numero = {tipo: "Numero", valor: this.formulaTokenizada[this.posicionToken].valor};
+
+        this.posicionToken++;
+
+        return numero 
     }
 
     ObtenerCelda() {
-    
+        let celda = "";
+
+        celda = {tipo: "Celda", valor: this.formulaTokenizada[this.posicionToken].valor};
+
+        this.posicionToken++;
+
+        return celda 
     }
 
     OperarParentesis() {
